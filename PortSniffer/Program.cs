@@ -6,7 +6,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PortSniffer //Christoph stinkt und Kira ist cool bzw. die coolste
+namespace PortSniffer //Kira stinkt und total uncool bzw. die uncoolste
 {
     class Program
     {
