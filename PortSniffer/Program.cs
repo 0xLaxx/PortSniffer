@@ -12,9 +12,7 @@ namespace PortSniffer
     {
         static void Main(string[] args)
         {
-            //TcpDemo();
-
-            
+            TcpDemo();
 
             Console.Read();
         }
