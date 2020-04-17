@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.IO;
 
 namespace Client
 {
@@ -11,7 +12,7 @@ namespace Client
             string json = data.ToJson();
 
             Console.WriteLine(json);
-            
+            File.WriteAllText("json.txt", json);
             //TODO Send json to Server (IP/random Port)   
             
             Console.Read();
