@@ -1,0 +1,41 @@
+Nvidia Titan RTX
+Nvidia GeForce RTX 2080 Ti
+Nvidia GeForce RTX 2080 Super
+Nvidia GeForce RTX 2080
+Nvidia GeForce RTX 2070 Super
+Nvidia Titan X
+Nvidia GeForce GTX 1080 Ti
+AMD Radeon VII
+AMD Radeon RX 5700 XT
+Nvidia GeForce RTX 2070
+Nvidia GeForce RTX 2060 Super
+AMD Radeon RX 5700
+Nvidia GeForce GTX 1080
+AMD Radeon RX 5600 XT
+AMD Radeon RX Vega 64
+Nvidia GeForce RTX 2060
+AMD Radeon RX Vega 56
+Nvidia GeForce GTX 1070 Ti
+Nvidia GeForce GTX 1660 Ti
+Nvidia GeForce GTX 1070
+Nvidia GeForce GTX 1660 Super
+Nvidia GeForce GTX 980 Ti
+Nvidia GeForce GTX 1660
+AMD Radeon RX 590
+AMD Radeon RX 5500 XT 8GB
+AMD Radeon R9 Fury X
+AMD Radeon RX 580 8GB
+Nvidia GeForce GTX 1650 Super
+AMD Radeon RX 5500 XT 4GB
+Nvidia GeForce GTX 980
+Nvidia GeForce GTX 1060 6GB
+AMD Radeon R9 390
+Nvidia GeForce GTX 1060 3GB
+Nvidia GeForce GTX 970
+AMD Radeon RX 570 4GB
+Nvidia GeForce GTX 1650
+Nvidia GeForce GTX 1050 Ti
+AMD Radeon RX 560 4GB
+Nvidia GeForce GTX 1050
+AMD Radeon RX 550
+Nvidia GeForce GT 1030

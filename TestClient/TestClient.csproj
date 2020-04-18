@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{693B12A6-DDB0-4C9B-AD13-D978C742FD7E}</ProjectGuid>
+    <ProjectGuid>{EDC63498-0239-4B12-BE0F-4E4442EA74A1}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>SerialPortDemo</RootNamespace>
-    <AssemblyName>SerialPortDemo</AssemblyName>
+    <RootNamespace>TestClient</RootNamespace>
+    <AssemblyName>TestClient</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -48,6 +48,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SampleData\SampleData.csproj">
+      <Project>{66842D49-9DCC-4813-B59B-6D90CB76409D}</Project>
+      <Name>SampleData</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

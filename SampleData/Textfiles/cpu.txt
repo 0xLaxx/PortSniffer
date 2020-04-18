@@ -1,0 +1,23 @@
+Intel Core i9-9900KS
+Intel Core i9-10980XE
+Intel Core i7-9700K
+Intel Core i9-9900K
+Intel Core i9-9900KF
+Intel Xeon W-3175X
+AMD Threadripper 3970X
+AMD Threadripper 3960X
+AMD Threadripper 3990X
+AMD Ryzen 9 3900X
+AMD Ryzen 9 3950X
+Intel Core i9-9980XE
+AMD Ryzen 9 3900
+AMD Ryzen 7 3700X
+AMD Ryzen 7 3800X
+Intel Core i7-8700K
+Intel Core i7-8700
+Intel Core i9-7960X
+AMD Ryzen 5 3600X
+Intel Core i5-9600K
+AMD Ryzen 5 3600
+Intel Core i5-8600K
+AMD Ryzen 7 2700X
