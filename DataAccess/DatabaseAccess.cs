@@ -12,56 +12,51 @@ namespace DataAccess
     {
         string connectionString = @"Server=localhost\SQLEXPRESS;Database=TestDb;Trusted_Connection=True;";
 
-        public List<Person> GetData()
+        public List<T> SelectAllFromTable<T>(string table)
         {
-            List<Person> output = new List<Person>();
+            List<T> output = new List<T>();
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(connectionString))
             {
-                output = connection.Query<Person>("Select * From Person")
-                                      .ToList();
-
+                output = connection.Query<T>($"SELECT * FROM {table}").ToList();
             }
 
             return output;
         }
 
-        public void Insert(Person p)
+        public void Insert<T>(T p, string sql)
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(connectionString))
             {
-                connection.Execute($"Insert into Person (Name, Age) values (@Name,@Age)", 
-                    p,
-                    commandType: CommandType.Text);
+                //TODO Datetime insert
+                connection.Execute(sql, p, commandType: CommandType.Text);
             }
         }
 
-        public bool DoesColumnExist(string columnName)
+        public void AlterTable(string sqlAlterTableString)
         {
-            bool exists = false;
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(connectionString))
             {
-                var columns = connection.Query<string>("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'Person' ORDER BY ORDINAL_POSITION").ToList();
+                connection.Execute(sqlAlterTableString, commandType: CommandType.Text);
+            }
+        }
+
+        public bool ColumnExists(string columnName, string table)
+        {
+            using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(connectionString))
+            {
+                var columns = connection.Query<string>($"SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '{table}' ORDER BY ORDINAL_POSITION").ToList();
 
                 foreach (var col in columns)
                 {
                     if (col.Equals(columnName,StringComparison.OrdinalIgnoreCase))
                     {
-                        exists = true;
-                        return exists;
+                        return true;
                     }
                 }
-
             }
 
             return false;
-
         }
-    }
-
-    public class Person
-    {
-        public string Name { get; set; }
-        public string Age { get; set; }
-
+        
     }
 }
