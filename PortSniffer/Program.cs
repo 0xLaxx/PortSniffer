@@ -52,8 +52,8 @@ namespace PortSniffer //Kira stinkt und total uncool bzw. die uncoolste
                         data = data.ToUpper();
                         byte[] msg = Encoding.ASCII.GetBytes(data);
 
-                        //networkStream.Write(msg, 0, msg.Length);
-                        //Console.WriteLine($"Sent: {data}");
+                        networkStream.Write(msg, 0, msg.Length);
+                        Console.WriteLine($"Sent: {data}");
                     }
 
                     client.Close();
