@@ -22,10 +22,11 @@ namespace PortSniffer //Kira stinkt und total uncool bzw. die uncoolste
             TcpListener server = null;
             int port = 55779;
             IPAddress ip = IPAddress.Loopback;
+            //ip = IPAddress.Parse("192.168.178...");
 
             try
             {
-                server = new TcpListener(port);
+                server = new TcpListener(ip,port);
                 server.Start();
 
                 byte[] bytes = new byte[256];
@@ -51,8 +52,8 @@ namespace PortSniffer //Kira stinkt und total uncool bzw. die uncoolste
                         data = data.ToUpper();
                         byte[] msg = Encoding.ASCII.GetBytes(data);
 
-                        networkStream.Write(msg, 0, msg.Length);
-                        Console.WriteLine($"Sent: {data}");
+                        //networkStream.Write(msg, 0, msg.Length);
+                        //Console.WriteLine($"Sent: {data}");
                     }
 
                     client.Close();
