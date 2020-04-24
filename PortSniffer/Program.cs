@@ -1,28 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using DataAccessLibrary;
+using System;
+using System.Configuration;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
-using System.Threading.Tasks;
 
-namespace PortSniffer //Kira stinkt und total uncool bzw. die uncoolste
+namespace PortSniffer
 {
     class Program
     {
         static void Main(string[] args)
         {
-            TcpDemo();
-
+            Start();
             Console.Read();
         }
 
-        private static void TcpDemo()
+        private static void Start()
         {
             TcpListener server = null;
-            int port = 55779;
+            
+            //todo - get values from user.config
             IPAddress ip = IPAddress.Loopback;
-            //ip = IPAddress.Parse("192.168.178...");
+            int port = 55779;
+            string table = "ServerDb";
+            string connectionString = ConfigurationManager.ConnectionStrings["DbConnection"].ConnectionString;
 
             try
             {
@@ -30,31 +31,30 @@ namespace PortSniffer //Kira stinkt und total uncool bzw. die uncoolste
                 server.Start();
 
                 byte[] bytes = new byte[256];
-                string data = null;
+                string jsonData = null;
 
                 while (true)
                 {
                     Console.WriteLine("Waiting for Connection...");
                     TcpClient client = server.AcceptTcpClient();
+                    
                     Console.WriteLine("Connected");
 
-                    data = null;
-
+                    jsonData = null;
                     NetworkStream networkStream = client.GetStream();
 
                     int i;
-
                     while ((i = networkStream.Read(bytes, 0, bytes.Length)) != 0)
                     {
-                        data = Encoding.ASCII.GetString(bytes, 0, i);
-                        Console.WriteLine($"Received: {data}");
-
-                        data = data.ToUpper();
-                        byte[] msg = Encoding.ASCII.GetBytes(data);
-
-                        networkStream.Write(msg, 0, msg.Length);
-                        Console.WriteLine($"Sent: {data}");
+                        jsonData += Encoding.ASCII.GetString(bytes, 0, i);
                     }
+
+                    Console.WriteLine($"Received: {jsonData}");
+
+                    var db = new ServerDatabaseConnection(table, ip.ToString(), port, connectionString);
+                    
+                    //todo - analyse if valid json
+                    db.InsertJsonToDb(jsonData);
 
                     client.Close();
                 }
