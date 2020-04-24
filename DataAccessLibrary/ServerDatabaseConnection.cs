@@ -2,7 +2,6 @@
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace DataAccessLibrary
 {
@@ -13,6 +12,9 @@ namespace DataAccessLibrary
         Dictionary<string, string> nonExistingColumns = new Dictionary<string, string>();
         IEnumerable<KeyValuePair<string, JValue>> fields;
         CRUDLogic db;
+        public event EventHandler<DbEventArgs> InsertEvent;
+        public event EventHandler<DbEventArgs> AlterTableEvent;
+        public event EventHandler<DbEventArgs> ErrorEvent;
         #endregion
 
         #region Properties
@@ -48,11 +50,19 @@ namespace DataAccessLibrary
 
         private void GetJsonFields(string json)
         {
-            //Deserialize to dynamic object
-            dynamic data = JObject.Parse(json);
-            JToken jsonParsed = JToken.Parse(json);
-            JsonFieldsCollector fieldsCollector = new JsonFieldsCollector(jsonParsed);
-            fields = fieldsCollector.GetAllFields();
+            try
+            {
+                JToken jsonParsed = JToken.Parse(json);
+                JsonFieldsCollector fieldsCollector = new JsonFieldsCollector(jsonParsed);
+                fields = fieldsCollector.GetAllFields();
+            }
+            catch (Exception e)
+            {
+                //todo - log parsing error
+
+                //Give back error to console on server
+                ErrorEvent?.Invoke(this, new DbEventArgs(e.Message));
+            }
         }
         private void GetColumnsFromJsonFields()
         {
@@ -71,12 +81,19 @@ namespace DataAccessLibrary
                     //if it exists, insert
                     //Console.WriteLine($"Column \"{columnName}\" already exists, inserting new value \"{ value }\" ...");
                     existingColumns[columnName] = value;
+
+                    string message = $"Column \"{columnName}\" already exists, inserting new value \"{ value }\" ...";
+                    InsertEvent?.Invoke(this, new DbEventArgs(message));
+
                 }
                 else
                 {
                     //if not, create and insert
                     //Console.WriteLine($"Column \"{columnName}\" doesn't exist, creating new column...");
                     nonExistingColumns[columnName] = value;
+
+                    string message = $"Column \"{columnName}\" doesn't exist, creating new column...";
+                    AlterTableEvent?.Invoke(this, new DbEventArgs(message));
                 }
             }
         }

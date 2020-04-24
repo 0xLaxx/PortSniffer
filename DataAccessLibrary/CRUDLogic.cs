@@ -33,7 +33,7 @@ namespace DatabaseAccessLibrary
             using (IDbConnection connection 
                 = new System.Data.SqlClient.SqlConnection(ConnectionString))
             {
-                //TODO Datetime insert
+                //todo - insert Datetime, ip, port 
                 connection.Execute(sql, p, commandType: CommandType.Text);
             }
         }

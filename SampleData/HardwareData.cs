@@ -26,7 +26,7 @@ namespace SampleData
         [JsonIgnore]
         Random random = new Random();
 
-        //TODO switch hardcoded path
+        //todo - switch hardcoded path
         static string textfileFolder = @"C:\Users\Christoph\source\repos\HSMW\PortSniffer\SampleData\Textfiles\"; 
         static string firstNamesTxt = $@"{textfileFolder}\firstnames.txt";
         static string lastNamesTxt = $@"{textfileFolder}\lastnames.txt";
