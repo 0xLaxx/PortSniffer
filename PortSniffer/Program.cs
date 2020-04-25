@@ -35,12 +35,12 @@ namespace PortSniffer
         private static void Start()
         {
             TcpListener server = null;
-
-            //todo - get values from user.config
-            IPAddress ip = IPAddress.Loopback;
-            int port = 55779;
-            string table = "ServerDb";
-            string connectionString = ConfigurationManager.ConnectionStrings["DbConnection"].ConnectionString;
+            
+            //Settings from xml
+            IPAddress ip = Settings.Get<IPAddress>(nameof(SettingsProperties.IP));
+            int port = Settings.Get<int>(nameof(SettingsProperties.Port));
+            string table = Settings.Get<string>(nameof(SettingsProperties.Table));
+            string connectionString = Settings.Get<string>(nameof(SettingsProperties.ConnectionString));
 
             try
             {
@@ -54,7 +54,7 @@ namespace PortSniffer
                 {
                     ColoredPrint("Waiting for Connection...", ConsoleColor.Yellow);
                     TcpClient client = server.AcceptTcpClient();
-                    ColoredPrint("Connected", ConsoleColor.Green);
+                    ColoredPrint("\nConnected", ConsoleColor.Green);
 
                     jsonData = null;
                     NetworkStream networkStream = client.GetStream();
@@ -65,14 +65,14 @@ namespace PortSniffer
                         jsonData += Encoding.ASCII.GetString(bytes, 0, i);
                     }
 
-                    ColoredPrint("Successfully received data. Printing data...", ConsoleColor.Yellow);
-                    Console.WriteLine(jsonData);
+                    ColoredPrint("\nSuccessfully received data. Printing data...", ConsoleColor.Yellow);
+                    Console.WriteLine(jsonData+"\n");
 
                     var db = new ServerDatabaseConnection(table, ip.ToString(), port, connectionString);
 
                     //events
-                    db.AlterTableEvent += Db_Event;
-                    db.InsertEvent += Db_Event;
+                    db.AlterTableEvent += Db_Alter;
+                    db.InsertEvent += Db_Insert;
                     db.ErrorEvent += Db_Error;
 
                     //insert
@@ -94,9 +94,14 @@ namespace PortSniffer
         #endregion
 
         #region Event methods
-        private static void Db_Event(object sender, DbEventArgs e)
+        private static void Db_Alter(object sender, DbEventArgs e)
         {
             ColoredPrint(e.Message, ConsoleColor.Yellow);
+        }
+
+        private static void Db_Insert(object sender, DbEventArgs e)
+        {
+            ColoredPrint(e.Message, ConsoleColor.Green);
         }
 
         private static void Db_Error(object sender, DbEventArgs e)

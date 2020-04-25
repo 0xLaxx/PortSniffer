@@ -79,17 +79,15 @@ namespace DataAccessLibrary
                 if (exists)
                 {
                     //if it exists, insert
-                    //Console.WriteLine($"Column \"{columnName}\" already exists, inserting new value \"{ value }\" ...");
                     existingColumns[columnName] = value;
 
-                    string message = $"Column \"{columnName}\" already exists, inserting new value \"{ value }\" ...";
+                    string message = $"Column \"{columnName}\" already exists, inserting new value \"{ value }\"...";
                     InsertEvent?.Invoke(this, new DbEventArgs(message));
 
                 }
                 else
                 {
                     //if not, create and insert
-                    //Console.WriteLine($"Column \"{columnName}\" doesn't exist, creating new column...");
                     nonExistingColumns[columnName] = value;
 
                     string message = $"Column \"{columnName}\" doesn't exist, creating new column...";
