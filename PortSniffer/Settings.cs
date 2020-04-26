@@ -14,7 +14,7 @@ namespace PortSniffer
         static Dictionary<string, object> SettingsDict { get; set; }
         public static T Get<T>(string key)
         {
-            string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "server.userconfig.txt");
+            string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "server.userconfig.txt");
             SettingsProperties settings = new SettingsProperties();
 
             //load or initialize settings
@@ -88,13 +88,13 @@ namespace PortSniffer
         public int Port { get; set; } = 55779;
 
         [XmlIgnore]
-        public IPAddress IP { get; set; } = IPAddress.Loopback;
+        public IPAddress IP { get; set; } = System.Net.IPAddress.Loopback;
 
         [XmlElement]
-        public string IP_xml
+        public string IPAddress
         {
             get { return IP.ToString(); }
-            set { IP = IPAddress.Parse(value); }
+            set { IP = System.Net.IPAddress.Parse(value); }
         }
 
 

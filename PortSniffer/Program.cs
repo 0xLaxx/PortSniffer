@@ -1,113 +1,35 @@
-﻿using DataAccessLibrary;
-using Newtonsoft.Json;
-using System;
-using System.Configuration;
-using System.Net;
-using System.Net.Sockets;
-using System.Text;
+﻿using System;
+using Topshelf;
 
 namespace PortSniffer
 {
     class Program
     {
-        #region Variables
-        public static Action<string, ConsoleColor> ColoredPrint
-            = new Action<string, ConsoleColor>((message, color) =>
-            {
-                Console.ForegroundColor = color;
-                Console.WriteLine(message);
-                Console.ResetColor();
-            });
-
-        #endregion
-     
-        #region Main
         static void Main(string[] args)
         {
-            //Todo - put inside windows service
-            Start();
-            Console.Read();
-        }
-
-        #endregion
-
-        #region Server logic
-        private static void Start()
-        {
-            TcpListener server = null;
-            
-            //Settings from xml
-            IPAddress ip = Settings.Get<IPAddress>(nameof(SettingsProperties.IP));
-            int port = Settings.Get<int>(nameof(SettingsProperties.Port));
-            string table = Settings.Get<string>(nameof(SettingsProperties.Table));
-            string connectionString = Settings.Get<string>(nameof(SettingsProperties.ConnectionString));
-
-            try
+            var exitcode = HostFactory.Run(h =>
             {
-                server = new TcpListener(ip, port);
-                server.Start();
-
-                byte[] bytes = new byte[256];
-                string jsonData = null;
-
-                while (true)
+                h.Service<Server>(s =>
                 {
-                    ColoredPrint("Waiting for Connection...", ConsoleColor.Yellow);
-                    TcpClient client = server.AcceptTcpClient();
-                    ColoredPrint("\nConnected", ConsoleColor.Green);
+                    s.ConstructUsing(server => new Server());
+                    s.WhenStarted(server => server.Start());
+                    s.WhenStopped(server => server.Stop());
+                });
 
-                    jsonData = null;
-                    NetworkStream networkStream = client.GetStream();
+                h.RunAsNetworkService();
 
-                    int i;
-                    while ((i = networkStream.Read(bytes, 0, bytes.Length)) != 0)
-                    {
-                        jsonData += Encoding.ASCII.GetString(bytes, 0, i);
-                    }
+                h.SetServiceName("Portlistener");
+                h.SetDisplayName("Portlistener");
 
-                    ColoredPrint("\nSuccessfully received data. Printing data...", ConsoleColor.Yellow);
-                    Console.WriteLine(jsonData+"\n");
+                h.SetDescription("Simple service that listens on a Port and IP. " +
+                                 "Writes all received JSON data into a specified MSSQL Table. " +
+                                 "To configure, edit the user.serverconfig in your LocalApplicationData.");
 
-                    var db = new ServerDatabaseConnection(table, ip.ToString(), port, connectionString);
+            });
 
-                    //events
-                    db.AlterTableEvent += Db_Alter;
-                    db.InsertEvent += Db_Insert;
-                    db.ErrorEvent += Db_Error;
-
-                    //insert
-                    db.InsertJsonToDb(jsonData);
-
-                    client.Close();
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
-            finally
-            {
-                server.Stop();
-            }
+            int exitCodeValue = (int)Convert.ChangeType(exitcode, exitcode.GetTypeCode());
+            Environment.ExitCode = exitCodeValue;
         }
 
-        #endregion
-
-        #region Event methods
-        private static void Db_Alter(object sender, DbEventArgs e)
-        {
-            ColoredPrint(e.Message, ConsoleColor.Yellow);
-        }
-
-        private static void Db_Insert(object sender, DbEventArgs e)
-        {
-            ColoredPrint(e.Message, ConsoleColor.Green);
-        }
-
-        private static void Db_Error(object sender, DbEventArgs e)
-        {
-            ColoredPrint(e.Message, ConsoleColor.Red);
-        } 
-        #endregion
     }
 }
