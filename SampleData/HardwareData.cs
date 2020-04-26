@@ -26,19 +26,17 @@ namespace SampleData
         [JsonIgnore]
         Random random = new Random();
 
-        //todo - switch hardcoded path
-        static string textfileFolder = @"C:\Users\Christoph\source\repos\HSMW\PortSniffer\SampleData\Textfiles\"; 
-        static string firstNamesTxt = $@"{textfileFolder}\firstnames.txt";
-        static string lastNamesTxt = $@"{textfileFolder}\lastnames.txt";
-        static string gpuTxt = $@"{textfileFolder}\gpu.txt";
-        static string cpuTxt = $@"{textfileFolder}\cpu.txt";
-        static string mainboardTxt = $@"{textfileFolder}\mainboard.txt";
-        static string ramTxt = $@"{textfileFolder}\ram.txt";
-        static string windowsVersionsTxt = $@"{textfileFolder}\windows.txt";
-        static string netFrameworkTxt = $@"{textfileFolder}\netframework.txt";
-        static string patchlevelTxt = $@"{textfileFolder}\patchlevel.txt";
+        static string firstNamesTxt = Properties.Resources.firstnames;
+        static string lastNamesTxt = Properties.Resources.lastnames;
+        static string gpuTxt = Properties.Resources.gpu;
+        static string cpuTxt = Properties.Resources.cpu;
+        static string mainboardTxt = Properties.Resources.mainboard;
+        static string ramTxt = Properties.Resources.ram;
+        static string windowsVersionsTxt = Properties.Resources.windows;
+        static string netFrameworkTxt = Properties.Resources.netframework;
+        static string patchlevelTxt = Properties.Resources.patchlevel;
         #endregion
-        
+
         //generates random sample data and randomly populates properties
         public HardwareData()
         {
@@ -77,14 +75,16 @@ namespace SampleData
         }
 
         //reads the textfiles and gives back a random string
-        private string GenerateRandomData(string txtPath)
+        private string GenerateRandomData(string textfile)
         {
-            List<string> output = new List<string>();
+            List<string> results;
 
             try
             {
-                output = File.ReadAllLines(txtPath).ToList();
-                return output[random.Next(output.Count)];
+                textfile = textfile.Replace("\r", "");
+                results = new List<string>(textfile.Split('\n'));
+
+                return results[random.Next(results.Count)];
             }
             catch
             {

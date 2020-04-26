@@ -2,14 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
 
 namespace DatabaseAccessLibrary
 {
     public class CRUDLogic
     {
-        //string connectionString 
-        //    = @"Server=localhost\SQLEXPRESS;Database=TestDb;Trusted_Connection=True;";
         public string ConnectionString { get; set; }
         public CRUDLogic(string cnnString)
         {
@@ -22,7 +21,14 @@ namespace DatabaseAccessLibrary
             using (IDbConnection connection 
                 = new System.Data.SqlClient.SqlConnection(ConnectionString))
             {
-                output = connection.Query<T>($"SELECT * FROM {table}").ToList();
+                try
+                {
+                    output = connection.Query<T>($"SELECT * FROM {table}").ToList();
+                }
+                catch (Exception)
+                {
+
+                }
             }
 
             return output;
@@ -34,7 +40,13 @@ namespace DatabaseAccessLibrary
                 = new System.Data.SqlClient.SqlConnection(ConnectionString))
             {
                 //todo - insert Datetime, ip, port 
-                connection.Execute(sql, p, commandType: CommandType.Text);
+                try
+                {
+                    connection.Execute(sql, p, commandType: CommandType.Text);
+                }
+                catch (Exception)
+                {
+                }
             }
         }
 
@@ -52,7 +64,16 @@ namespace DatabaseAccessLibrary
             using (IDbConnection connection 
                 = new System.Data.SqlClient.SqlConnection(ConnectionString))
             {
-                var columns = connection.Query<string>($"SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '{table}' ORDER BY ORDINAL_POSITION").ToList();
+                List<string> columns = new List<string>();
+                try
+                {
+                    columns = connection.Query<string>($"SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '{table}' ORDER BY ORDINAL_POSITION").ToList();
+                }
+                catch (Exception e)
+                {
+
+                }
+
 
                 foreach (var col in columns)
                 {

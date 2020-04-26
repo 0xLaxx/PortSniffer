@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using Topshelf;
 
 namespace PortSniffer
@@ -16,7 +17,8 @@ namespace PortSniffer
                     s.WhenStopped(server => server.Stop());
                 });
 
-                h.RunAsNetworkService();
+                h.StartAutomatically();
+                h.RunAsLocalSystem();
 
                 h.SetServiceName("Portlistener");
                 h.SetDisplayName("Portlistener");
