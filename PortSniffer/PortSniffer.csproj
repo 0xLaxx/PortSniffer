@@ -50,7 +50,6 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Server.cs" />
-    <Compile Include="Settings.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -60,6 +59,14 @@
     <ProjectReference Include="..\DataAccessLibrary\DataAccessLibrary.csproj">
       <Project>{E55EDA62-318A-44A6-80EB-309899626665}</Project>
       <Name>DataAccessLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LogLibrary\LogLibrary.csproj">
+      <Project>{997b7fce-1bc8-446e-ac07-32aee75c81c8}</Project>
+      <Name>LogLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SettingsLibrary\SettingsLibrary.csproj">
+      <Project>{63313f4c-dd13-4f4d-8546-02de66acd0e0}</Project>
+      <Name>SettingsLibrary</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -1,4 +1,6 @@
 ﻿using DataAccessLibrary;
+using LogLibrary;
+using SettingsLibrary;
 using System;
 using System.IO;
 using System.Net;
@@ -10,24 +12,18 @@ namespace PortSniffer
 {
     public class Server
     {
-        #region Variables
-        Action<string, ConsoleColor> ColoredPrint
-            = new Action<string, ConsoleColor>((message, color) =>
-            {
-                Console.ForegroundColor = color;
-                Console.WriteLine(message);
-                Console.ResetColor();
-            });
-
-        #endregion
-
         #region Fields
+
+        //Serversettings
         TcpListener server;
         IPAddress ip = Settings.Get<IPAddress>(nameof(SettingsProperties.IP));
         int port = Settings.Get<int>(nameof(SettingsProperties.Port));
+
+        //Databse settings
         string table = Settings.Get<string>(nameof(SettingsProperties.Table));
         string connectionString = Settings.Get<string>(nameof(SettingsProperties.ConnectionString));
         bool saveToDb = Settings.Get<bool>(nameof(SettingsProperties.SaveToDatabase));
+
         #endregion
 
         public Server()
@@ -44,11 +40,15 @@ namespace PortSniffer
                 var listenerThread = new Thread(new ThreadStart(Listen));
                 listenerThread.IsBackground = true;
                 listenerThread.Start();
+
+                Logger.LogEvent($"Server started on {ip}:{port}");
+                Logger.LogMessage($"Table {table} on {connectionString} selected. Saving to database {(saveToDb ? "enabled" : "disabled")}.");
+
                 return true;
             }
-            catch (Exception) //todo log
+            catch (Exception e)
             {
-                //ColoredPrint(e.Message, ConsoleColor.Red);
+                Logger.LogError(e.Message);
 
                 Stop();
                 return false;
@@ -56,6 +56,7 @@ namespace PortSniffer
         }
         public void Stop()
         {
+            Logger.LogEvent("Server stopped");
             server.Stop();
         }
 
@@ -66,9 +67,7 @@ namespace PortSniffer
 
             while (true)
             {
-                //ColoredPrint("\nWaiting for Connection...", ConsoleColor.Yellow);
                 TcpClient client = server.AcceptTcpClient();
-                //ColoredPrint("\nConnected", ConsoleColor.Green);
 
                 jsonData = null;
                 NetworkStream networkStream = client.GetStream();
@@ -79,15 +78,9 @@ namespace PortSniffer
                     jsonData += Encoding.ASCII.GetString(bytes, 0, i);
                 }
 
-                //ColoredPrint("\nSuccessfully received data. Printing data...", ConsoleColor.Yellow);
-                //Console.WriteLine(jsonData + "\n");
+                Logger.LogEvent($"Successfully received data of length {jsonData.Length}."); //TODO: Log data?
 
                 var db = new ServerDatabaseConnection(table, ip.ToString(), port, connectionString);
-
-                //events
-                //db.AlterTableEvent += Db_Alter;
-                //db.InsertEvent += Db_Insert;
-                //db.ErrorEvent += Db_Error;
 
                 //insert
                 if (saveToDb)
@@ -98,23 +91,6 @@ namespace PortSniffer
             }
         }
 
-        #endregion
-
-        #region Event methods
-        //void Db_Alter(object sender, DbEventArgs e)
-        //{
-        //    ColoredPrint(e.Message, ConsoleColor.Yellow);
-        //}
-
-        //void Db_Insert(object sender, DbEventArgs e)
-        //{
-        //    ColoredPrint(e.Message, ConsoleColor.Green);
-        //}
-
-        //void Db_Error(object sender, DbEventArgs e)
-        //{
-        //    ColoredPrint(e.Message, ConsoleColor.Red);
-        //}
         #endregion
     }
 }

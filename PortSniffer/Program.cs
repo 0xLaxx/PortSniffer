@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LogLibrary;
+using System;
 using System.IO;
 using Topshelf;
 
@@ -23,14 +24,17 @@ namespace PortSniffer
                 h.SetServiceName("Portlistener");
                 h.SetDisplayName("Portlistener");
 
-                h.SetDescription("Simple service that listens on a Port and IP. " +
-                                 "Writes all received JSON data into a specified MSSQL Table. " +
-                                 "To configure, edit the user.serverconfig in your LocalApplicationData.");
-
+                h.SetDescription("Simple service that listens on a given Port and IP. " +
+                                 "Writes all received JSON data into a specified MSSQL Table. Table needs to be created first. " +
+                                 "To configure, edit the user.serverconfig in your LocalApplicationData. " +
+                                 "This service automatically creates a logfile. To visit, view the port_listener.log in your LocalApplicationData. " +
+                                 "Make sure to allow sql connection to NT-AUTHORITY\\SYSTEM in your database settings!");
             });
 
             int exitCodeValue = (int)Convert.ChangeType(exitcode, exitcode.GetTypeCode());
             Environment.ExitCode = exitCodeValue;
+
+            Logger.LogEvent($"Exited with code {exitCodeValue}");
         }
 
     }

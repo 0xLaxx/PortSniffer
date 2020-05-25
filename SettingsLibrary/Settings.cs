@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace PortSniffer
+namespace SettingsLibrary
 {
     public static class Settings
     {
@@ -86,6 +86,8 @@ namespace PortSniffer
         public bool SaveToDatabase { get; set; } = true;
         public string Table { get; set; } = "ServerDb";
         public int Port { get; set; } = 55779;
+        public string LogPath { get; set; } = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "port_listener.log.txt");
+        public bool EnableLogger { get; set; } = false;
 
         [XmlIgnore]
         public IPAddress IP { get; set; } = System.Net.IPAddress.Loopback;
