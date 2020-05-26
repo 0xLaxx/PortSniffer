@@ -53,7 +53,7 @@ namespace TestClient
         #endregion
 
         #region Methods
-       
+
         //Help
         private static void PrintHelp()
         {
@@ -157,7 +157,7 @@ namespace TestClient
 
                 //Get client stream to write data to server
                 NetworkStream stream = client.GetStream();
-                
+
                 //Convert json to ASCII
                 byte[] data = Encoding.ASCII.GetBytes(jsonString);
 

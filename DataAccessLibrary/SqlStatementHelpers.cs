@@ -28,7 +28,7 @@ namespace DatabaseAccessLibrary
 
             return alterTableString;
         }
-        
+
         //loop through both dictionaries, create insert statement
         public static string CreateSqlInsertString(Dictionary<string, string> existingColumns
             , Dictionary<string, string> nonExistingColumns, string table)

@@ -3,7 +3,6 @@ using LogLibrary;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.IO;
 
 namespace DataAccessLibrary
 {
@@ -74,10 +73,7 @@ namespace DataAccessLibrary
                 string value = field.Value.ToString();
 
                 //check if column exists
-                bool exists = db.ColumnExists(columnName, Table);
-
-                //todo event for server output
-                if (exists)
+                if (db.ColumnExists(columnName, Table))
                 {
                     //if it exists, insert
                     existingColumns[columnName] = value;

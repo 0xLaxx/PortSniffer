@@ -1,8 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 
 namespace SampleData
 {
@@ -21,7 +19,7 @@ namespace SampleData
         public string PatchLevel { get; set; }
         public string NetFramework { get; set; }
         #endregion
-        
+
         #region Fields
         [JsonIgnore]
         Random random = new Random();

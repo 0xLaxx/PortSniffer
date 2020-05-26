@@ -2,7 +2,6 @@
 using LogLibrary;
 using SettingsLibrary;
 using System;
-using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -78,7 +77,7 @@ namespace PortSniffer
                     jsonData += Encoding.ASCII.GetString(bytes, 0, i);
                 }
 
-                Logger.LogEvent($"Successfully received data of length {jsonData.Length}."); //TODO: Log data?
+                Logger.LogEvent($"Successfully received data of length {jsonData.Length}.");
 
                 var db = new ServerDatabaseConnection(table, ip.ToString(), port, connectionString);
 

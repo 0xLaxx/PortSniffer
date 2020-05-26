@@ -1,6 +1,5 @@
 ﻿using LogLibrary;
 using System;
-using System.IO;
 using Topshelf;
 
 namespace PortSniffer

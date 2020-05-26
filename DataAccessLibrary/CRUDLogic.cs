@@ -3,7 +3,6 @@ using LogLibrary;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.IO;
 using System.Linq;
 
 namespace DatabaseAccessLibrary
@@ -79,7 +78,7 @@ namespace DatabaseAccessLibrary
 
                 foreach (var col in columns)
                 {
-                    if (col.Equals(columnName,StringComparison.OrdinalIgnoreCase))
+                    if (col.Equals(columnName, StringComparison.OrdinalIgnoreCase))
                     {
                         return true;
                     }
@@ -88,6 +87,6 @@ namespace DatabaseAccessLibrary
 
             return false;
         }
-        
+
     }
 }

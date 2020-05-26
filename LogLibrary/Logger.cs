@@ -1,8 +1,6 @@
 ﻿using SettingsLibrary;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 
 namespace LogLibrary
 {
@@ -55,9 +53,9 @@ namespace LogLibrary
             if (enabled)
             {
                 string logMessage = $"{DateTime.Now} - {logtype}: {message}\n";
-                File.AppendAllText(LogPath, logMessage); 
+                File.AppendAllText(LogPath, logMessage);
             }
         }
-        
+
     }
 }
