@@ -15,6 +15,7 @@ namespace DatabaseAccessLibrary
             CollectFields(token);
         }
 
+        //recursively collect json fields and add to list of key value pairs
         private void CollectFields(JToken jToken)
         {
             switch (jToken.Type)

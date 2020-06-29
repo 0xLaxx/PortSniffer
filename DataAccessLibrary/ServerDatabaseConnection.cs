@@ -21,21 +21,26 @@ namespace DataAccessLibrary
         //public int Port { get; set; }
         #endregion
 
-        public ServerDatabaseConnection(string table, string ip, int port, string cnnString)
+        //inititalizes
+        public ServerDatabaseConnection(string table, string cnnString)
         {
             Table = table;
-            //Ip = ip;
-            //Port = port;
             db = new CRUDLogic(cnnString);
         }
 
+        //method to insert json string in db
         public void InsertJsonToDb(string json)
         {
+            //converts json fields to Key value pairs
             GetJsonFields(json);
+
+            //initializes dictionaries of existing + non existing columns
             GetColumnsFromJsonFields();
 
+            //creates insert string
             string sqlInsertString = SqlStatementHelpers.CreateSqlInsertString(existingColumns, nonExistingColumns, Table);
 
+            //creates alter table string for non existing columns
             if (nonExistingColumns.Count > 0)
             {
                 Logger.LogMessage("Data contains new Properties. Creating new columns...");
@@ -44,15 +49,18 @@ namespace DataAccessLibrary
                 db.AlterTable(sqlAlterTableString);
             }
 
+            //creates dynamic object to insert
             var insertObject = SqlStatementHelpers.CreateNewInsertObject(existingColumns, nonExistingColumns);
 
             Logger.LogMessage("Inserting new data...");
 
+            //insert
             db.Insert(insertObject, sqlInsertString);
         }
 
         private void GetJsonFields(string json)
         {
+            //validate json + parse
             try
             {
                 JToken jsonParsed = JToken.Parse(json);

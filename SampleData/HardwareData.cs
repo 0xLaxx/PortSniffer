@@ -24,6 +24,7 @@ namespace SampleData
         [JsonIgnore]
         Random random = new Random();
 
+        //gets textfiles in saves it as a string
         static string firstNamesTxt = Properties.Resources.firstnames;
         static string lastNamesTxt = Properties.Resources.lastnames;
         static string gpuTxt = Properties.Resources.gpu;
@@ -79,9 +80,13 @@ namespace SampleData
 
             try
             {
+                //replaces all returns with nothing
                 textfile = textfile.Replace("\r", "");
+
+                //splits string into array for each line
                 results = new List<string>(textfile.Split('\n'));
 
+                //picks random entry from list
                 return results[random.Next(results.Count)];
             }
             catch
@@ -91,11 +96,12 @@ namespace SampleData
 
         }
 
-        //serializes as json and ignores the properties that did not get populated in constructor
+        //serializes as json
         public string GenerateJson()
         {
             return JsonConvert.SerializeObject(this, Formatting.Indented, new JsonSerializerSettings
             {
+                //ignores the properties that did not get populated in constructor
                 DefaultValueHandling = DefaultValueHandling.Ignore
             });
         }

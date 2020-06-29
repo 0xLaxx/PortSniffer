@@ -15,6 +15,7 @@ namespace TestClient
             random, select, exit, help, clear
         }
 
+        //Action to output in color
         public static Action<string, ConsoleColor> ColoredPrint
             = new Action<string, ConsoleColor>((message, color) =>
             {
@@ -35,6 +36,7 @@ namespace TestClient
 
             do
             {
+                //get action from user
                 currentAction = GetMenuAction();
 
                 switch (currentAction)
@@ -47,7 +49,7 @@ namespace TestClient
                     default: break;
                 }
 
-            } while (currentAction != MenuActions.exit);
+            } while (currentAction != MenuActions.exit); //do until user quits
         }
 
         #endregion
@@ -69,9 +71,11 @@ namespace TestClient
         {
             MenuActions action = MenuActions.help;
 
+            //ask user to type in action
             ColoredPrint("\nPlease type an action and press enter to continue: ", ConsoleColor.Yellow);
             string choice = Console.ReadLine();
 
+            //if invalid user choice print help
             if (Enum.TryParse(choice.ToLower(), out action) == false)
             {
                 ColoredPrint("Invalid choice. Printing help...\n", ConsoleColor.Red);
@@ -92,6 +96,7 @@ namespace TestClient
                 var fileAsArray = File.ReadAllLines(path);
                 var file = File.ReadAllText(path);
 
+                //print a preview from file (10 lines)
                 Console.WriteLine("\nPrinting first 10 lines of your file...");
 
                 for (int i = 0; i < fileAsArray.Length; i++)
@@ -109,10 +114,12 @@ namespace TestClient
 
                 if (yesno.Equals("y", StringComparison.OrdinalIgnoreCase))
                 {
+                    //send file
                     SendToServer(file);
                 }
                 else
                 {
+                    //abort
                     ColoredPrint("If you say so. ", ConsoleColor.Red);
                     PrintHelp();
                 }
@@ -158,7 +165,7 @@ namespace TestClient
                 //Get client stream to write data to server
                 NetworkStream stream = client.GetStream();
 
-                //Convert json to ASCII
+                //Convert ASCII to byte array
                 byte[] data = Encoding.ASCII.GetBytes(jsonString);
 
                 //Send json as byte array to connected server (tcplistener) 
@@ -194,6 +201,7 @@ namespace TestClient
                 server = Console.ReadLine();
                 validUserInput = IPAddress.TryParse(server, out IPAddress _);
 
+                //accept if user types localhost
                 if (server == "localhost")
                 {
                     server = "127.0.0.1";

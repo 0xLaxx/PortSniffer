@@ -20,6 +20,7 @@ namespace LogLibrary
 
         static Logger()
         {
+            //settings from xml
             LogPath = Settings.Get<string>(nameof(SettingsProperties.LogPath));
             enabled = Settings.Get<bool>(nameof(SettingsProperties.EnableLogger));
         }
@@ -48,11 +49,14 @@ namespace LogLibrary
             Log(LogType.ERROR, message);
         }
 
+        //logs by using enum and message
         private static void Log(LogType logtype, string message)
         {
             if (enabled)
             {
                 string logMessage = $"{DateTime.Now} - {logtype}: {message}\n";
+
+                //appends to file or creates it
                 File.AppendAllText(LogPath, logMessage);
             }
         }

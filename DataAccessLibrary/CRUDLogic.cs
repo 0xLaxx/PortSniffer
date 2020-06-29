@@ -16,6 +16,7 @@ namespace DatabaseAccessLibrary
         }
 
         [Obsolete]
+        //for testing purposes to select all from table
         public List<T> SelectAllFromTable<T>(string table)
         {
             List<T> output = new List<T>();
@@ -34,12 +35,14 @@ namespace DatabaseAccessLibrary
             return output;
         }
 
+        //insert with sql string and object of type T
         public void Insert<T>(T p, string sql)
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(ConnectionString))
             {
                 try
                 {
+                    //text insert command 
                     connection.Execute(sql, p, commandType: CommandType.Text);
                     Logger.LogMessage("Data successfully inserted.");
                 }
@@ -50,6 +53,7 @@ namespace DatabaseAccessLibrary
             }
         }
 
+        //alter table if new fields are in json
         public void AlterTable(string sqlAlterTableString)
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(ConnectionString))
@@ -61,6 +65,7 @@ namespace DatabaseAccessLibrary
             }
         }
 
+        //check each column if it exists or not --> if not --> Alter table
         public bool ColumnExists(string columnName, string table)
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(ConnectionString))

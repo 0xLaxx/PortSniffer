@@ -14,17 +14,17 @@ namespace PortSniffer
     {
         #region Fields
 
-        //Serversettings
+        // Serversettings
         TcpListener server;
         IPAddress ip = Settings.Get<IPAddress>(nameof(SettingsProperties.IP));
-        int port = Settings.Get<int>(nameof(SettingsProperties.Port));
-
-        //Databse settings
+        int port = Settings.Get<int>(nameof(SettingsProperties.Port)); 
+         
+        // XML settings for database
         string table = Settings.Get<string>(nameof(SettingsProperties.Table));
         string database = Settings.Get<string>(nameof(SettingsProperties.Database));
         string serverString = Settings.Get<string>(nameof(SettingsProperties.Server));
-        string connectionString;
         bool saveToDb = Settings.Get<bool>(nameof(SettingsProperties.SaveToDatabase));
+        string connectionString;
 
         #endregion
 
@@ -34,6 +34,7 @@ namespace PortSniffer
             server = new TcpListener(ip, port);
         }
 
+        //builds connection string from xml settings
         private string BuildConnectionString()
         {
             SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
@@ -45,11 +46,15 @@ namespace PortSniffer
         }
 
         #region Server logic
+        //start method for windows service - true if successful
         public bool Start()
         {
             try
             {
-                server.Start();
+                //starts tcp listener
+                server.Start(); 
+
+                //new thread of listen method to avoid timeout in service
                 var listenerThread = new Thread(new ThreadStart(Listen));
                 listenerThread.IsBackground = true;
                 listenerThread.Start();
@@ -67,6 +72,7 @@ namespace PortSniffer
                 return false;
             }
         }
+
         public void Stop()
         {
             Logger.LogEvent("Server stopped");
@@ -75,19 +81,22 @@ namespace PortSniffer
 
         public void Listen()
         {
+            //initialize variables 
             byte[] bytes = new byte[256];
             string jsonData = null;
 
             while (true)
             {
+                //waits for data
                 TcpClient client = server.AcceptTcpClient();
 
                 jsonData = null;
                 NetworkStream networkStream = client.GetStream();
 
-                int i;
+                int i; //reads data as bytes in 256 byte chunks
                 while ((i = networkStream.Read(bytes, 0, bytes.Length)) != 0)
                 {
+                    //appends each byte to string and converts it to ASCII
                     jsonData += Encoding.ASCII.GetString(bytes, 0, i);
                 }
 
@@ -99,7 +108,7 @@ namespace PortSniffer
                     //insert in DB
                     if (saveToDb)
                     {
-                        var db = new ServerDatabaseConnection(table, ip.ToString(), port, connectionString);
+                        var db = new ServerDatabaseConnection(table, connectionString);
                         db.InsertJsonToDb(jsonData);
                     }
                 }

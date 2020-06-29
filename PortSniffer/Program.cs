@@ -8,6 +8,7 @@ namespace PortSniffer
     {
         static void Main(string[] args)
         {
+            //configures windows service
             var exitcode = HostFactory.Run(h =>
             {
                 h.Service<Server>(s =>

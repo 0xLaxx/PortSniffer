@@ -65,17 +65,23 @@ namespace DatabaseAccessLibrary
         public static dynamic CreateNewInsertObject(Dictionary<string, string> existingColumns
             , Dictionary<string, string> nonExistingColumns)
         {
+            //merges dictionaries
             var mergedDictionaries = existingColumns.Union(nonExistingColumns);
+            
+            //converts it to string, object dictionary --> is needed for expandoobject
             var dictionary = mergedDictionaries.ToDictionary(pair => pair.Key, pair => (object)pair.Value);
 
             var expandoObject = new ExpandoObject();
             var expandoObjectCollection = (ICollection<KeyValuePair<string, object>>)expandoObject;
 
+            //maps each key to expandoobjectcollection
+            //like creating a new class dynamically with propertyname=key and propertyvalue=value
             foreach (var item in dictionary)
             {
                 expandoObjectCollection.Add(item);
             }
 
+            //convert to dynamic
             dynamic output = expandoObject;
             return output;
         }

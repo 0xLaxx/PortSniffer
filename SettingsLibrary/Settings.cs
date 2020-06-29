@@ -24,14 +24,16 @@ namespace SettingsLibrary
                 SerializeToXML(settings, path);
             }
 
-            //return
+            //initializes dictionary with settings
             SettingsDict = LoadDictionary(settings);
             try
             {
+                //returns object of type T for key (settingsproperty)
                 return (T)SettingsDict[key.ToLower()];
             }
             catch
             {
+                //returns default value for type T if error
                 return default;
             }
         }
@@ -65,6 +67,7 @@ namespace SettingsLibrary
         {
             Dictionary<string, object> output = new Dictionary<string, object>();
 
+            //gets properties with reflection and maps them to a dictionary
             foreach (var prop in settings.GetType().GetProperties())
             {
                 output[prop.Name.ToLower()] = prop.GetValue(settings);
@@ -76,7 +79,7 @@ namespace SettingsLibrary
         #endregion
     }
 
-
+    //placeholder class for each setting
     public class SettingsProperties
     {
         public bool SaveToDatabase { get; set; } = true;
