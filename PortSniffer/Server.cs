@@ -2,6 +2,7 @@
 using LogLibrary;
 using SettingsLibrary;
 using System;
+using System.Data.SqlClient;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -27,6 +28,7 @@ namespace PortSniffer
 
         public Server()
         {
+            
             server = new TcpListener(ip, port);
         }
 
@@ -79,11 +81,21 @@ namespace PortSniffer
 
                 Logger.LogEvent($"Successfully received data of length {jsonData.Length}.");
 
-                var db = new ServerDatabaseConnection(table, ip.ToString(), port, connectionString);
 
-                //insert
-                if (saveToDb)
-                    db.InsertJsonToDb(jsonData);
+                try
+                {
+                    //insert in DB
+                    if (saveToDb)
+                    {
+                        var db = new ServerDatabaseConnection(table, ip.ToString(), port, connectionString);
+                        db.InsertJsonToDb(jsonData);
+                    }
+                }
+                catch (Exception e)
+                {
+                    //Log error if something doesn't work during insert (like no valid JSON or other errors)
+                    Logger.LogError(e.Message);
+                }
 
 
                 client.Close();

@@ -66,18 +66,18 @@ namespace DatabaseAccessLibrary
             , Dictionary<string, string> nonExistingColumns)
         {
             var mergedDictionaries = existingColumns.Union(nonExistingColumns);
-            var strObjDict = mergedDictionaries.ToDictionary(pair => pair.Key, pair => (object)pair.Value);
+            var dictionary = mergedDictionaries.ToDictionary(pair => pair.Key, pair => (object)pair.Value);
 
-            var eo = new ExpandoObject();
-            var eoColl = (ICollection<KeyValuePair<string, object>>)eo;
+            var expandoObject = new ExpandoObject();
+            var expandoObjectCollection = (ICollection<KeyValuePair<string, object>>)expandoObject;
 
-            foreach (var kvp in strObjDict)
+            foreach (var item in dictionary)
             {
-                eoColl.Add(kvp);
+                expandoObjectCollection.Add(item);
             }
 
-            dynamic eoDynamic = eo;
-            return eoDynamic;
+            dynamic output = expandoObject;
+            return output;
         }
     }
 }

@@ -79,12 +79,14 @@ namespace SettingsLibrary
 
     public class SettingsProperties
     {
-        public string ConnectionString { get; set; } = @"Server=localhost\SQLEXPRESS;Database=TestDb;Trusted_Connection=True;";
+        public string ConnectionString { get; set; } = @"Server=localhost\SQLEXPRESS;Database=PortlistenerDb;Trusted_Connection=True;";
         public bool SaveToDatabase { get; set; } = true;
-        public string Table { get; set; } = "ServerDb";
+        public string Table { get; set; } = "SniffedData";
+        //public string Database { get; set; } = "PortlistenerDb";
+        //public string Server { get; set; } = "localhost\\SQLEXPRESS";
         public int Port { get; set; } = 55779;
         public string LogPath { get; set; } = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "port_listener.log.txt");
-        public bool EnableLogger { get; set; } = false;
+        public bool EnableLogger { get; set; } = true;
 
         [XmlIgnore]
         public IPAddress IP { get; set; } = System.Net.IPAddress.Loopback;

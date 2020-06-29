@@ -17,15 +17,15 @@ namespace DataAccessLibrary
 
         #region Properties
         public string Table { get; set; }
-        public string Ip { get; set; }
-        public int Port { get; set; }
+        //public string Ip { get; set; }
+        //public int Port { get; set; }
         #endregion
 
         public ServerDatabaseConnection(string table, string ip, int port, string cnnString)
         {
             Table = table;
-            Ip = ip;
-            Port = port;
+            //Ip = ip;
+            //Port = port;
             db = new CRUDLogic(cnnString);
         }
 
@@ -59,10 +59,13 @@ namespace DataAccessLibrary
                 JsonFieldsCollector fieldsCollector = new JsonFieldsCollector(jsonParsed);
                 fields = fieldsCollector.GetAllFields();
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                Logger.LogError(e.Message);
+                //Throws exception (parsing) + forwards it to the Server 
+                //--> doesn't continue + error gets logged
+                throw; 
             }
+
         }
         private void GetColumnsFromJsonFields()
         {

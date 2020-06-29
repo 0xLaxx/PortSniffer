@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace DatabaseAccessLibrary
 {
+    //SOURCE: https://riptutorial.com/de/csharp/example/32164/sammeln-sie-alle-felder-des-json-objekts
     public class JsonFieldsCollector
     {
         private readonly Dictionary<string, JValue> fields;

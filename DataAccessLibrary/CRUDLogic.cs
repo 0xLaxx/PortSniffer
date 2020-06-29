@@ -15,6 +15,7 @@ namespace DatabaseAccessLibrary
             ConnectionString = cnnString;
         }
 
+        [Obsolete]
         public List<T> SelectAllFromTable<T>(string table)
         {
             List<T> output = new List<T>();
@@ -40,7 +41,6 @@ namespace DatabaseAccessLibrary
                 try
                 {
                     connection.Execute(sql, p, commandType: CommandType.Text);
-
                     Logger.LogMessage("Data successfully inserted.");
                 }
                 catch (Exception e)
