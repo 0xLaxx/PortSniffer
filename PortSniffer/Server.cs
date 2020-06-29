@@ -21,15 +21,27 @@ namespace PortSniffer
 
         //Databse settings
         string table = Settings.Get<string>(nameof(SettingsProperties.Table));
-        string connectionString = Settings.Get<string>(nameof(SettingsProperties.ConnectionString));
+        string database = Settings.Get<string>(nameof(SettingsProperties.Database));
+        string serverString = Settings.Get<string>(nameof(SettingsProperties.Server));
+        string connectionString;
         bool saveToDb = Settings.Get<bool>(nameof(SettingsProperties.SaveToDatabase));
 
         #endregion
 
         public Server()
         {
-            
+            connectionString = BuildConnectionString();
             server = new TcpListener(ip, port);
+        }
+
+        private string BuildConnectionString()
+        {
+            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
+            builder["Server"] = serverString;
+            builder["Database"] = database;
+            builder["Trusted_Connection"] = true;
+
+            return builder.ConnectionString;
         }
 
         #region Server logic
